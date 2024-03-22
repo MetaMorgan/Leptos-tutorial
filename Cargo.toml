@@ -9,3 +9,5 @@ edition = "2021"
 console_error_panic_hook = "0.1.7"
 leptos = { version = "0.6.9", features = ["csr", "nightly"] }
 gloo-timers = { version = "0.3.0", features = ["futures"] }
+uuid = { version = "1.8.0", features = ["v4"] }
+leptos_router = { version = "0.6.9", features = ["csr"] }

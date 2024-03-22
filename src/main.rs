@@ -1,11 +1,56 @@
 use leptos::*;
+use leptos_router::*;
 mod components;
+mod apps;
 
 fn main() {
-    let values = vec![0, 1, 2];
+    
     console_error_panic_hook::set_once();
     mount_to_body(|| view! { 
-        <>
+        <RouteManager />        
+    })
+}
+
+#[component]
+fn RouteManager() -> impl IntoView {
+    view! {
+        <Router>
+            <h1>"Leptos Examples"</h1>
+            // this <nav> will show on every routes, because its outside the <Routes/>
+            // note: we can just use normal <a> tags and the router will use client-side navigation
+            <nav>
+                <A href="/">"Home"</A>
+                <A href="/form">"Form"</A>
+                <A href="/contacts">"Contacts"</A>
+            </nav>
+            <main>
+                <Routes>
+                    // / just has an un-nested "home"
+                    <Route path="/" view=Home/>
+
+                    // route to the form example
+                    <Route path="/form" view=components::form_component::FormComponent/>
+
+                    // contact has nested routes
+                    <Route path="/contacts" view=apps::contacts::ContactList>
+                        // if no id specified, fall back
+                        <Route path=":id" view=apps::contacts::ContactInfo>
+                            <Route path="" view=|| view! { <div class="tab"> "(Contact Info)" </div>}/>
+                            <Route path="conversations" view=|| view! {<div class="tab">"(Conversations)"</div>}/>
+                        </Route>
+                        <Route path="" view=|| view! { <div class="select-user">"Select a user to view contact info."</div>}/>
+                    </Route>                    
+                </Routes>
+            </main>
+        </Router>
+    }
+}
+
+#[component]
+fn Home() -> impl IntoView {
+    let values = vec![0, 1, 2];
+
+    view! {
         <components::app::App />
         <components::app::App /> 
         // this will just render 012
@@ -43,11 +88,15 @@ fn main() {
         <h1>"ASYNC COMPONENT"</h1>
         <div style="float:left"><components::async_component::AsyncComponent /></div>
         <div style="float:left"><components::suspense_component::SuspenseComponent /></div>
-        </>
-        
-    })
-}
+        <div style="float:left"><components::transition_component::TransitionComponent /></div>
+        <div style="float:left"><components::async_action_component::AsyncActionComponent /></div>
+        <div style="clear:both" />
 
+        <h1>"GLOBAL STATE"</h1>
+        <div style="float:left"><components::global_state::Option2 /></div>
+        <div style="float:left"><components::global_state::Option3 /></div>
+    }
+}
 
 #[component]
 fn ForExample() -> impl IntoView {

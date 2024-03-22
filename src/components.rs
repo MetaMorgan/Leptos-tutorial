@@ -10,3 +10,7 @@ pub mod parent_child;
 pub mod effects;
 pub mod async_component;
 pub mod suspense_component;
+pub mod transition_component;
+pub mod async_action_component;
+pub mod global_state;
+pub mod form_component;
